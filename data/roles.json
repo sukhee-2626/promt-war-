@@ -1,0 +1,93 @@
+[
+  {
+    "id": "full_stack_developer",
+    "name": "Full Stack Developer",
+    "skills": [
+      {"skill_id": "html", "required_mastery": 0.8, "weight": 0.6},
+      {"skill_id": "css", "required_mastery": 0.7, "weight": 0.6},
+      {"skill_id": "javascript", "required_mastery": 0.85, "weight": 1.0},
+      {"skill_id": "js_es6", "required_mastery": 0.8, "weight": 0.8},
+      {"skill_id": "js_async", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "typescript", "required_mastery": 0.6, "weight": 0.7},
+      {"skill_id": "react", "required_mastery": 0.8, "weight": 0.9},
+      {"skill_id": "react_hooks", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "nextjs", "required_mastery": 0.65, "weight": 0.7},
+      {"skill_id": "nodejs", "required_mastery": 0.8, "weight": 0.9},
+      {"skill_id": "express", "required_mastery": 0.7, "weight": 0.8},
+      {"skill_id": "rest_api", "required_mastery": 0.8, "weight": 0.9},
+      {"skill_id": "sql", "required_mastery": 0.7, "weight": 0.8},
+      {"skill_id": "postgresql", "required_mastery": 0.6, "weight": 0.7},
+      {"skill_id": "mongodb", "required_mastery": 0.6, "weight": 0.6},
+      {"skill_id": "git", "required_mastery": 0.8, "weight": 0.7},
+      {"skill_id": "docker", "required_mastery": 0.6, "weight": 0.6},
+      {"skill_id": "jwt", "required_mastery": 0.7, "weight": 0.7},
+      {"skill_id": "testing", "required_mastery": 0.6, "weight": 0.6},
+      {"skill_id": "system_design", "required_mastery": 0.5, "weight": 0.5}
+    ]
+  },
+  {
+    "id": "data_analyst",
+    "name": "Data Analyst",
+    "skills": [
+      {"skill_id": "sql", "required_mastery": 0.9, "weight": 1.0},
+      {"skill_id": "sql_advanced", "required_mastery": 0.8, "weight": 0.9},
+      {"skill_id": "python", "required_mastery": 0.75, "weight": 0.9},
+      {"skill_id": "pandas", "required_mastery": 0.85, "weight": 0.9},
+      {"skill_id": "numpy", "required_mastery": 0.7, "weight": 0.7},
+      {"skill_id": "matplotlib", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "data_visualization", "required_mastery": 0.85, "weight": 0.9},
+      {"skill_id": "data_cleaning", "required_mastery": 0.85, "weight": 0.9},
+      {"skill_id": "statistics", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "excel_advanced", "required_mastery": 0.7, "weight": 0.6},
+      {"skill_id": "tableau", "required_mastery": 0.65, "weight": 0.7},
+      {"skill_id": "power_bi", "required_mastery": 0.6, "weight": 0.6},
+      {"skill_id": "data_modeling", "required_mastery": 0.7, "weight": 0.7},
+      {"skill_id": "git", "required_mastery": 0.6, "weight": 0.5}
+    ]
+  },
+  {
+    "id": "ml_engineer",
+    "name": "ML Engineer",
+    "skills": [
+      {"skill_id": "python", "required_mastery": 0.9, "weight": 1.0},
+      {"skill_id": "numpy", "required_mastery": 0.85, "weight": 0.9},
+      {"skill_id": "pandas", "required_mastery": 0.85, "weight": 0.9},
+      {"skill_id": "statistics", "required_mastery": 0.8, "weight": 0.9},
+      {"skill_id": "linear_algebra", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "probability", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "scikit_learn", "required_mastery": 0.85, "weight": 0.9},
+      {"skill_id": "feature_engineering", "required_mastery": 0.8, "weight": 0.8},
+      {"skill_id": "model_evaluation", "required_mastery": 0.85, "weight": 0.9},
+      {"skill_id": "deep_learning", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "pytorch", "required_mastery": 0.7, "weight": 0.8},
+      {"skill_id": "mlops", "required_mastery": 0.65, "weight": 0.7},
+      {"skill_id": "model_deployment", "required_mastery": 0.7, "weight": 0.8},
+      {"skill_id": "docker", "required_mastery": 0.65, "weight": 0.7},
+      {"skill_id": "sql", "required_mastery": 0.65, "weight": 0.6},
+      {"skill_id": "git", "required_mastery": 0.75, "weight": 0.7}
+    ]
+  },
+  {
+    "id": "backend_developer",
+    "name": "Backend Developer",
+    "skills": [
+      {"skill_id": "python", "required_mastery": 0.85, "weight": 1.0},
+      {"skill_id": "fastapi", "required_mastery": 0.8, "weight": 0.9},
+      {"skill_id": "nodejs", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "rest_api", "required_mastery": 0.9, "weight": 1.0},
+      {"skill_id": "sql", "required_mastery": 0.8, "weight": 0.9},
+      {"skill_id": "sql_advanced", "required_mastery": 0.7, "weight": 0.8},
+      {"skill_id": "postgresql", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "redis", "required_mastery": 0.65, "weight": 0.7},
+      {"skill_id": "docker", "required_mastery": 0.75, "weight": 0.8},
+      {"skill_id": "jwt", "required_mastery": 0.8, "weight": 0.8},
+      {"skill_id": "system_design", "required_mastery": 0.7, "weight": 0.8},
+      {"skill_id": "microservices", "required_mastery": 0.6, "weight": 0.7},
+      {"skill_id": "message_queues", "required_mastery": 0.6, "weight": 0.6},
+      {"skill_id": "testing", "required_mastery": 0.7, "weight": 0.7},
+      {"skill_id": "git", "required_mastery": 0.8, "weight": 0.7},
+      {"skill_id": "linux", "required_mastery": 0.65, "weight": 0.6},
+      {"skill_id": "security_basics", "required_mastery": 0.65, "weight": 0.7}
+    ]
+  }
+]

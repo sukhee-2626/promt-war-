@@ -22,24 +22,15 @@ https://github.com/sukhee-2626/promt-war-.git
 Branch: main | User: sukhee-2626 | Email: sukheesakthivel07@gmail.com
 
 ## Current Phase
-**Phase 2 — F1 Profile + F2 Skill Analysis** (NEXT)
+**Phase 3 — Career Matching / Gap Analyst** (NEXT)
 
 ## Completed
 - [x] Phase 0: Monorepo folders, requirements.txt, .env.example, FastAPI + /health, SQLite + all 11 tables
-- [x] Phase 1: data/skills.json (90 skills), data/skill_edges.json (88 edges),
-               data/roles.json (4 roles), backend/app/graph/loader.py (build_graph,
-               prerequisites, learning_path, role_skills), backend/tests/test_graph.py (5 tests)
-
-## In Progress
-- Nothing — ready for Phase 2
-
-## Up Next: Phase 2 Tasks
-- POST /profile + GET /profile/{id}
-- Profiler Agent: extract skills from free text / resume PDF / GitHub descriptions
-  → map to graph skill_ids via bge-small embeddings (similarity threshold 0.75)
-- UserSkill rows with initial mastery + confidence + source
-- Frontend: onboarding form + resume upload + Recharts radar chart + React Flow graph
-  (green=mastered, yellow=learning, red=gap, grey=locked)
+- [x] Phase 1: data/skills.json (90), data/skill_edges.json (88 edges), data/roles.json (4 roles),
+               graph/loader.py (build_graph, prerequisites, learning_path, role_skills), test_graph.py
+- [x] Phase 2: Profiler Agent (embedding-based skill extraction), POST/GET /profile,
+               GET /profile/{id}/skill-analysis, Next.js frontend — onboarding form,
+               dashboard with radar chart + skill list + mastery bars
 
 ## Remaining Phases
 3: Career Matching — gap analyst agent, match %

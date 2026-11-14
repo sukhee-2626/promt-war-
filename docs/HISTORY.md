@@ -69,8 +69,43 @@ Next step: Phase 2 — Profile API + Profiler Agent + Radar chart frontend
 
 ---
 
-## Phase 2 — F1 Profile + F2 Skill Analysis
-Status: PENDING
+## Phase 2 — F1 Profile + F2 Skill Analysis ✅ COMPLETE
+Date: 2025-07-15
+
+Files created:
+- backend/app/agents/profiler.py     — Profiler Agent:
+                                       ProfilerInput / ProfilerOutput / SkillMatch (Pydantic)
+                                       _extract_mentions() — regex-based candidate extraction
+                                       _match_to_graph()   — bge-small cosine similarity ≥ 0.60
+                                       _initial_mastery()  — keyword heuristic (expert→0.85 … basic→0.35)
+                                       run_profiler()      — deduplicates by skill_id, keeps best sim
+- backend/app/api/profile.py         — POST /profile, GET /profile/{id}, GET /profile/{id}/skill-analysis
+- backend/app/main.py (updated)      — added profile router + startup create_db()
+- frontend/package.json              — Next.js 14 + Recharts + ReactFlow + Tailwind deps
+- frontend/next.config.js            — NEXT_PUBLIC_API_URL env passthrough
+- frontend/tailwind.config.js        — Tailwind setup
+- frontend/postcss.config.js
+- frontend/src/app/globals.css       — dark theme base
+- frontend/src/app/layout.tsx        — root layout
+- frontend/src/app/page.tsx          — landing page → /onboarding
+- frontend/src/app/onboarding/page.tsx  — form: name, email, role, hours, free text, github descs
+- frontend/src/app/dashboard/[userId]/page.tsx — skill twin dashboard:
+                                                  mastered/learning/gap/locked counts
+                                                  radar chart + skill list with mastery bars
+- frontend/src/components/SkillRadar.tsx — Recharts RadarChart component
+- frontend/src/lib/api.ts            — typed API client (createProfile, getProfile, skillAnalysis)
+
+Result: ✅ Profile API + Profiler Agent + Frontend dashboard complete.
+        Profiler maps free text → graph skill_ids via embeddings (no LLM needed for extraction).
+        Radar chart groups skills by category.
+
+Decisions:
+- Similarity threshold 0.60 for bge-small (tune up for precision, down for recall)
+- Profiler uses regex extraction + embedding matching (LLM NER skipped — YAGNI for hackathon)
+- Singleton embedding model — loaded once per process
+- Skill analysis endpoint returns both radar data and node colors in one call
+
+Next step: Phase 3 — Gap Analyst Agent + Career Matching page
 
 ## Phase 3 — F3 Career Matching
 Status: PENDING

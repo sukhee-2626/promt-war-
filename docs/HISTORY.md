@@ -217,17 +217,99 @@ Decisions:
 
 Next step: Phase 7 — Orchestrator + LangGraph event routing + adaptive replanning
 
-## Phase 7 — Orchestrator + Adaptive Replanning (F7)
-Status: PENDING
+## Phase 7 — Orchestrator + Adaptive Replanning (F7) ✅ COMPLETE
+Date: 2025-07-15
 
-## Phase 8 — Critic Debate (F8) + Mentor (F6)
-Status: PENDING
+Files created:
+- backend/app/agents/orchestrator.py — LangGraph state machine:
+                                       OrchestratorState (TypedDict)
+                                       Nodes: evaluator, gap_analyst, planner, curator, mentor_message
+                                       Conditional entry: assessment_* → evaluator, else → gap_analyst
+                                       Edges: evaluator→gap_analyst→planner→curator→mentor_message→END
+                                       Remedial skill injection at top of gaps list
+                                       All agent I/O saved to agent_logs list in state
+                                       run_orchestrator() — public API
+- backend/app/api/events.py          — POST /events/{user_id}: stores event, runs orchestrator,
+                                       updates mastery, archives old roadmap, saves new roadmap v2+,
+                                       persists all AgentLog rows
+                                       GET /events/{user_id}/logs: returns agent activity transcript
 
-## Phase 9 — Career Pivot Diff (F9)
-Status: PENDING
+Result: ✅ assessment_failed → remedial node at top → new roadmap version.
+        goal_changed → full re-plan via gap_analyst → planner → curator.
 
-## Phase 10 — Polish + Demo Seed Data
-Status: PENDING
+Decisions:
+- Remedial node gets impact_score=999 to force it to position 1
+- LangGraph compile() called once at module load (singleton)
+
+---
+
+## Phase 8 — Critic Debate (F8) + Mentor (F6) ✅ COMPLETE
+Date: 2025-07-15
+
+Files created:
+- backend/app/agents/critic.py       — Critic Agent:
+                                       Checks: prereq violations, unrealistic hours (>40h/week),
+                                       recent failures ignored (failed skill not in top 3),
+                                       low variety (>10 skills per milestone)
+                                       Returns: issues list + approved bool + summary
+- backend/app/agents/mentor.py       — Mentor Agent:
+                                       LLM-backed chat with grounded system prompt
+                                       Rules: hints before answers, cite skill graph, no invented URLs
+                                       Fallback message if LLM unavailable
+                                       cited_skills extracted from message text
+- backend/app/api/mentor.py          — POST /mentor/{user_id}: chat endpoint, saves AgentLog
+                                       GET /mentor/{user_id}/debate/{roadmap_id}: Planner⇄Critic
+                                       transcript (max 2 rounds), saved to agent_logs
+- frontend/src/app/agent-activity/   — Agent debate UI: color-coded Planner/Critic turns,
+                                       issues list, approved badge, final plan display
+- frontend/src/components/MentorChat.tsx — Floating chat widget (bottom-right), works on any page
+
+Result: ✅ Debate visible in UI. Mentor chat grounded in twin data. Max 2 rounds enforced.
+
+---
+
+## Phase 9 — Career Pivot Diff (F9) ✅ COMPLETE
+Date: 2025-07-15
+
+Files created:
+- backend/app/api/pivot.py           — POST /pivot/{user_id}:
+                                       Classifies each new-role skill as: transferable, partial, new_needed
+                                       Lists no_longer_needed skills from old role
+                                       Computes hours_saved vs starting from scratch
+                                       Returns transfer_percent, new_match_percent, new_roadmap_weeks
+- frontend/src/app/pivot/[userId]/page.tsx — Pivot UI:
+                                       Role selector + "Analyze" button
+                                       4 stat cards: transfer%, hours saved, new match%, weeks
+                                       3-column diff: Transfers / Partial / New Skills
+                                       Confirm button → fires goal_changed event → rebuilds roadmap
+
+Result: ✅ Pivot diff complete. Confirm triggers orchestrator replanning.
+
+---
+
+## Phase 10 — Polish + Demo Seed ✅ COMPLETE
+Date: 2025-07-15
+
+Files created:
+- backend/seed_demo.py               — Seeds demo learner (Python+SQL+HTML → Full Stack Dev)
+                                       Prints all demo URLs with user ID
+- README.md                          — Full project README:
+                                       Architecture diagram, stack table, API endpoint table,
+                                       Quick Start, 5-min demo script, file map,
+                                       multi-tool session continuity instructions
+
+Result: ✅ All 10 phases complete. Full platform built and pushed to GitHub.
+
+---
+
+## Final Summary
+Commits: main branch, repo sukhee-2626/promt-war-
+Phases:  0 (setup) → 1 (graph) → 2 (profile) → 3 (match) → 4 (RAG) →
+         5 (planner) → 6 (assessor/BKT) → 7 (orchestrator) → 8 (critic/mentor) →
+         9 (pivot) → 10 (demo/polish)
+Agents:  Profiler, GapAnalyst, Planner, Critic, ResourceCurator, Assessor, Evaluator, Mentor, Orchestrator
+APIs:    /health /profile /match /roadmap /assess /events /mentor /pivot
+Pages:   / /onboarding /dashboard /match /roadmap /assess /progress /agent-activity /pivot
 
 ---
 

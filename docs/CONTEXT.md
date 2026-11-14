@@ -1,4 +1,4 @@
-# SkillForge — CONTEXT (always current, under 1 page)
+# SkillForge — CONTEXT (always current)
 
 ## Project
 SkillForge: AI-powered personalized learning platform.
@@ -6,25 +6,23 @@ Each learner = Skill Digital Twin on a Knowledge Graph.
 Mastery = Bayesian probability (not checkbox).
 Agents debate roadmap. RAG fetches only real resources.
 
-## Stack (LOCKED — do not change)
-| Layer       | Choice                                                        |
-|-------------|---------------------------------------------------------------|
-| Backend     | FastAPI + SQLModel + SQLite                                   |
-| Graph       | NetworkX DiGraph (singleton, build once)                      |
-| Vector DB   | ChromaDB + bge-small-en-v1.5 embeddings                       |
-| Agents      | LangGraph orchestrator                                        |
-| LLM         | Ollama llama3.1:8b (env flag: LLM_PROVIDER=groq → Groq API)  |
-| Frontend    | Next.js + Tailwind + shadcn/ui + Recharts + React Flow        |
-| Resume      | pdfplumber + LLM extraction                                   |
+## Stack (LOCKED)
+| Layer | Choice |
+|---|---|
+| Backend | FastAPI + SQLModel + SQLite |
+| Graph | NetworkX DiGraph (singleton) |
+| Vector DB | ChromaDB + bge-small-en-v1.5 |
+| Agents | LangGraph orchestrator |
+| LLM | Ollama llama3.1:8b (env: LLM_PROVIDER=groq → Groq) |
+| Frontend | Next.js 14 + Tailwind + Recharts |
 
 ## Repo
 https://github.com/sukhee-2626/promt-war-.git
 Branch: main | User: sukhee-2626 | Email: sukheesakthivel07@gmail.com
 
-## Current Phase
-**Phase 7 — Orchestrator + Adaptive Replanning** (NEXT)
+## Status: ALL 10 PHASES COMPLETE ✅
 
-## Completed
+## Phases Completed
 - [x] Phase 0: Monorepo, FastAPI, /health, all 11 DB tables
 - [x] Phase 1: skills.json (90), skill_edges.json (88), roles.json (4), graph/loader.py, test_graph.py
 - [x] Phase 2: Profiler Agent, /profile API, onboarding + dashboard (radar chart, skill twin)
@@ -32,61 +30,50 @@ Branch: main | User: sukhee-2626 | Email: sukheesakthivel07@gmail.com
 - [x] Phase 4: resources.json (120), rag/ingest.py, Resource Curator Agent (RAG + guardrail)
 - [x] Phase 5: Planner Agent, /roadmap API (prerequisite-ordered, week estimates), Roadmap UI
 - [x] Phase 6: Assessor Agent (LLM MCQ), Evaluator Agent (BKT), /assess API, Quiz + Progress UI
+- [x] Phase 7: Orchestrator (LangGraph), /events API, adaptive replanning (assessment_failed, goal_changed)
+- [x] Phase 8: Critic Agent (prereq/hours/failure checks), Mentor Agent (grounded chat), Debate UI + Chat widget
+- [x] Phase 9: Pivot Diff (/pivot API + UI: transfer/partial/new 3-column + hours saved)
+- [x] Phase 10: seed_demo.py, README.md with full docs
 
-## In Progress
-- Nothing — ready for Phase 7
+## Run Instructions
+```bash
+# Backend
+cd backend && cp .env.example .env
+pip install -r requirements.txt
+python -m app.rag.ingest      # one-time ChromaDB setup
+uvicorn app.main:app --reload
 
-## Up Next: Phase 7
-- POST /events endpoint
-- LangGraph orchestrator state machine
-- assessment_failed → Evaluator → Gap Analyst → Planner (insert remedial) → Curator
-- goal_changed → Gap Analyst → Planner → Curator
-- Save all agent I/O to agent_logs table
-- Test: fail JS quiz → roadmap v2 with remedial JS node
+# Frontend
+cd frontend && npm install && npm run dev
 
-## Remaining
-8: Critic Debate (Planner ⇄ Critic max 2 rounds) + Mentor chat
-9: Career Pivot Diff
-10: Polish + demo seed data
-
-## Known Bugs
-None.
-
-## Key Decisions
-- BKT params in .env.example (prior=0.3, learn=0.15, slip=0.1, guess=0.2)
-- Mastery thresholds: <0.4 → remedial, >0.8 → complete
-- RAG guardrail: returns [] + warning if skill not in ChromaDB store
-- Topological sort for path order (not Dijkstra)
-- Agent debate max 2 rounds (Phase 8)
-
-## File Map
+# Seed demo
+python backend/seed_demo.py
 ```
-backend/app/main.py              — FastAPI + all routers registered
-backend/app/db.py                — SQLite engine + session
-backend/app/api/health.py        — GET /health ✅
-backend/app/api/profile.py       — POST/GET /profile, GET /profile/{id}/skill-analysis ✅
-backend/app/api/match.py         — GET /match/{user_id} ✅
-backend/app/api/roadmap.py       — GET /roadmap/{user_id} ✅
-backend/app/api/assess.py        — GET/POST /assess/{user_id}/{skill_id} ✅
-backend/app/models/tables.py     — 11 SQLModel tables ✅
-backend/app/graph/loader.py      — NetworkX DiGraph ✅
-backend/app/rag/ingest.py        — ChromaDB ingestion script ✅
-backend/app/agents/profiler.py   — Profiler Agent ✅
-backend/app/agents/gap_analyst.py— Gap Analyst Agent ✅
-backend/app/agents/planner.py    — Planner Agent ✅
-backend/app/agents/resource_curator.py — Curator Agent (RAG) ✅
-backend/app/agents/assessor.py   — Assessor Agent (LLM MCQ) ✅
-backend/app/agents/evaluator.py  — Evaluator Agent (BKT) ✅
-backend/tests/test_graph.py      — Phase 1 tests ✅
-data/skills.json                 — 90 skill nodes ✅
-data/skill_edges.json            — 88 prerequisite edges ✅
-data/roles.json                  — 4 roles ✅
-data/resources.json              — 120 real resources ✅
-frontend/src/app/page.tsx        — Landing ✅
-frontend/src/app/onboarding/     — Onboarding form ✅
-frontend/src/app/dashboard/      — Skill twin + radar ✅
-frontend/src/app/match/          — Career match % + gaps ✅
-frontend/src/app/roadmap/        — Timeline roadmap ✅
-frontend/src/app/assess/         — Quiz page ✅
-frontend/src/app/progress/       — Progress dashboard ✅
+
+## All API Endpoints
+GET  /health
+POST /profile  |  GET /profile/{id}  |  GET /profile/{id}/skill-analysis
+GET  /match/{id}?role=
+GET  /roadmap/{id}
+GET  /assess/{id}/{skill}  |  POST /assess/{id}/{skill}
+POST /events/{id}  |  GET /events/{id}/logs
+POST /mentor/{id}  |  GET /mentor/{id}/debate/{roadmap_id}
+POST /pivot/{id}
+
+## All Frontend Pages
+/  →  /onboarding  →  /dashboard/[userId]  →  /match/[userId]
+→  /roadmap/[userId]  →  /assess/[userId]/[skillId]  →  /progress/[userId]
+→  /agent-activity/[userId]/[roadmapId]  →  /pivot/[userId]
+
+## Key Files
+```
+backend/app/agents/     — 9 agents: profiler, gap_analyst, planner, critic,
+                          resource_curator, assessor, evaluator, mentor, orchestrator
+backend/app/api/        — 8 routers: health, profile, match, roadmap, assess, events, mentor, pivot
+backend/app/graph/      — NetworkX loader + path functions
+backend/app/rag/        — ChromaDB ingestion
+data/                   — skills.json, skill_edges.json, roles.json, resources.json
+docs/                   — PRD.md, CONTEXT.md (this), HISTORY.md
+README.md               — Full setup + demo guide
+backend/seed_demo.py    — Demo data seeder
 ```

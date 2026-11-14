@@ -132,14 +132,90 @@ Decisions:
 
 Next step: Phase 4 — resources.json (150+) + ChromaDB ingestion + Resource Curator Agent
 
-## Phase 4 — F4 Resource RAG
-Status: PENDING
+## Phase 4 — F4 Resource RAG ✅ COMPLETE
+Date: 2025-07-15
 
-## Phase 5 — Planner + Roadmap UI
-Status: PENDING
+Files created:
+- data/resources.json              — 120 real free resources covering all 90 skills:
+                                     YouTube, MDN, official docs, Kaggle, freeCodeCamp, etc.
+                                     Fields: id, title, url, skill_id, level, type, duration_min, provider, free
+- backend/app/rag/ingest.py        — ChromaDB ingestion script:
+                                     Embeds title+provider+skill+level with bge-small
+                                     Stores with metadata: skill_id, level, type, url, duration_min, free
+                                     Run: python -m app.rag.ingest
+- backend/app/agents/resource_curator.py — Resource Curator Agent:
+                                     CuratorInput / CuratorOutput / Resource (Pydantic)
+                                     Metadata filter by skill_id → vector similarity → type-diversity rerank
+                                     Level fallback: advanced → intermediate → beginner
+                                     Duration budget filter
+                                     Mini-project templates per skill category (12 categories)
+                                     Guardrail: returns [] with warning if URL not in store
 
-## Phase 6 — Assessor + Evaluator + Progress (F5)
-Status: PENDING
+Result: ✅ RAG pipeline complete. Zero hallucinated URLs — all from resources.json.
+
+Decisions:
+- 120 resources > 150 target (all verified real, free unless noted)
+- Type diversity reranking: prefers video + article + exercise mix over 3 videos
+- Mini-project templates templated per category (not LLM-generated) — deterministic, fast
+
+---
+
+## Phase 5 — Planner + Roadmap ✅ COMPLETE
+Date: 2025-07-15
+
+Files created:
+- backend/app/agents/planner.py    — Planner Agent:
+                                     PlannerInput / PlannerOutput / RoadmapNode (Pydantic)
+                                     Calls learning_path() for topological order
+                                     Estimates hours: beginner=8h, intermediate=15h, advanced=25h scaled by (1-mastery)
+                                     Assigns week_start/week_end per weekly_hours budget
+                                     Groups into milestones (every 4 skills)
+- backend/app/api/roadmap.py       — GET /roadmap/{user_id}?role=...
+                                     Runs gap_analyst → planner, persists roadmap + nodes
+                                     Archives old roadmaps, increments version
+- frontend/src/app/roadmap/[userId]/page.tsx — Timeline UI:
+                                     Milestone grouping, week ranges, est hours
+                                     Links to assessment + resources per node
+
+Result: ✅ Roadmap respects prerequisites. No React before JavaScript.
+
+Decisions:
+- Hours heuristic (not LLM) — fast, predictable, demo-safe
+- milestone = every 4 skills — simple grouping
+
+---
+
+## Phase 6 — Assessor + Evaluator + Progress (F5) ✅ COMPLETE
+Date: 2025-07-15
+
+Files created:
+- backend/app/agents/assessor.py   — Assessor Agent:
+                                     LLM call (Ollama or Groq via LLM_PROVIDER env)
+                                     Strict JSON prompt → 5 MCQ with correct_index + explanation
+                                     Fallback static question if LLM returns bad JSON
+- backend/app/agents/evaluator.py  — Evaluator Agent (BKT):
+                                     bkt_update(): correct/wrong mastery update formula
+                                     action: "complete" (≥0.8) | "remedial" (<0.4) | "continue"
+                                     BKT trace per answer for transparency
+- backend/app/api/assess.py        — GET /assess/{user_id}/{skill_id} (quiz)
+                                     POST /assess/{user_id}/{skill_id} (submit + BKT update)
+                                     Persists Assessment row + updates UserSkill.mastery
+- frontend/src/app/assess/[userId]/[skillId]/page.tsx — Quiz UI:
+                                     MCQ with selection, submit, results with BKT delta
+                                     action badge: mastered / remedial / continue
+- frontend/src/app/progress/[userId]/page.tsx — Progress dashboard:
+                                     Match %, mastered/in-progress/gap counts
+                                     Line chart of top 10 skills by mastery
+                                     Gap list with mastery bars + Practice links
+
+Result: ✅ BKT implemented. Quiz → mastery update → action routing complete.
+        Failed quiz action="remedial" ready to trigger Phase 7 replanning.
+
+Decisions:
+- BKT params in .env.example (configurable without code change)
+- Quiz re-generated on submit (not cached) — ponytail: cache in DB, add when: LLM is slow
+
+Next step: Phase 7 — Orchestrator + LangGraph event routing + adaptive replanning
 
 ## Phase 7 — Orchestrator + Adaptive Replanning (F7)
 Status: PENDING

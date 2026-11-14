@@ -107,8 +107,30 @@ Decisions:
 
 Next step: Phase 3 — Gap Analyst Agent + Career Matching page
 
-## Phase 3 — F3 Career Matching
-Status: PENDING
+## Phase 3 — F3 Career Matching ✅ COMPLETE
+Date: 2025-07-15
+
+Files created:
+- backend/app/agents/gap_analyst.py  — Gap Analyst Agent:
+                                       GapAnalystInput / GapAnalystOutput / SkillGap (Pydantic)
+                                       Deterministic scoring: impact = weight * gap * (1 + dependents*0.5)
+                                       match_percent = earned_weight / total_weight * 100
+                                       Explanation string (no LLM — fast, deterministic)
+- backend/app/api/match.py           — GET /match/{user_id}?role=...
+- backend/app/main.py (updated)      — added match router
+- frontend/src/app/match/[userId]/page.tsx — Career Match page:
+                                              SVG match % ring, role selector dropdown
+                                              gap list with mastery bars + required threshold marker
+
+Result: ✅ Match % + ranked gap list in <100ms (pure Python math, no LLM).
+
+Decisions:
+- impact_score = weight × gap × (1 + dependent_skills_in_role × 0.5)
+  → prerequisite skills that unlock many others rank highest
+- Explanation deferred from LLM to string template (Phase 8 Mentor will narrate)
+- Partial mastery earns partial match credit (not binary)
+
+Next step: Phase 4 — resources.json (150+) + ChromaDB ingestion + Resource Curator Agent
 
 ## Phase 4 — F4 Resource RAG
 Status: PENDING

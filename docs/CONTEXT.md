@@ -22,15 +22,13 @@ https://github.com/sukhee-2626/promt-war-.git
 Branch: main | User: sukhee-2626 | Email: sukheesakthivel07@gmail.com
 
 ## Current Phase
-**Phase 3 — Career Matching / Gap Analyst** (NEXT)
+**Phase 4 — Resource RAG** (NEXT)
 
 ## Completed
-- [x] Phase 0: Monorepo folders, requirements.txt, .env.example, FastAPI + /health, SQLite + all 11 tables
-- [x] Phase 1: data/skills.json (90), data/skill_edges.json (88 edges), data/roles.json (4 roles),
-               graph/loader.py (build_graph, prerequisites, learning_path, role_skills), test_graph.py
-- [x] Phase 2: Profiler Agent (embedding-based skill extraction), POST/GET /profile,
-               GET /profile/{id}/skill-analysis, Next.js frontend — onboarding form,
-               dashboard with radar chart + skill list + mastery bars
+- [x] Phase 0: Monorepo, FastAPI, /health, all 11 DB tables
+- [x] Phase 1: skills.json (90), skill_edges.json (88), roles.json (4), graph/loader.py, test_graph.py
+- [x] Phase 2: Profiler Agent, /profile API, onboarding + dashboard (radar chart, skill twin)
+- [x] Phase 3: Gap Analyst Agent, /match API, Career Match page (% ring + ranked gap list)
 
 ## Remaining Phases
 3: Career Matching — gap analyst agent, match %

@@ -3,14 +3,16 @@ Mentor Agent — grounded conversational guide.
 Has tools: get_twin, get_roadmap, explain_recommendation, get_hint.
 Rules: hints before answers, cites graph data, refuses to invent resources.
 """
-from __future__ import annotations
-import os, json
+import os, json, chromadb
+from sentence_transformers import SentenceTransformer
 from pathlib import Path
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
 load_dotenv()
 DATA = Path(__file__).parent.parent.parent.parent / "data"
+CHROMA = os.getenv("CHROMA_PATH", "./chroma_db")
+EMBED = os.getenv("EMBED_MODEL", "BAAI/bge-small-en-v1.5")
 
 
 class MentorInput(BaseModel):
@@ -27,15 +29,29 @@ class MentorOutput(BaseModel):
     cited_resources: list[str]
 
 
-def _get_twin_summary(twin_skills: dict) -> str:
+def _retrieve_resources(weak_skills: list) -> list:
+    if not weak_skills: return []
+    client = chromadb.PersistentClient(path=CHROMA)
+    col = client.get_collection("resources")
+    # Query for resources matching any of the weak skills
+    res = col.query(
+        query_texts=[f"skill:{s}" for s in weak_skills],
+        n_results=3,
+        where={"skill_id": {"$in": weak_skills}} if weak_skills else None
+    )
+    return [meta["title"] for meta in res.get("metadatas", [[]])[0]]
+
+
+def _get_twin_summary(twin_skills: dict) -> tuple:
     mastered = [sid for sid, m in twin_skills.items() if m >= 0.8]
     learning = [sid for sid, m in twin_skills.items() if 0.4 <= m < 0.8]
     weak     = [sid for sid, m in twin_skills.items() if m < 0.4]
-    return (
+    summary = (
         f"Mastered: {', '.join(mastered[:5]) or 'none'}. "
         f"Learning: {', '.join(learning[:5]) or 'none'}. "
         f"Weak: {', '.join(weak[:5]) or 'none'}."
     )
+    return summary, weak
 
 
 def _get_next_steps(roadmap_nodes: list) -> str:
@@ -83,13 +99,15 @@ Reply as the Mentor:"""
 
 
 def run_mentor(inp: MentorInput) -> MentorOutput:
-    twin_summary  = _get_twin_summary(inp.twin_skills)
+    twin_summary, weak_skills = _get_twin_summary(inp.twin_skills)
     next_steps    = _get_next_steps(inp.roadmap_nodes)
+    resources     = _retrieve_resources(weak_skills)
 
     context = (
         f"Goal: {inp.goal_role.replace('_',' ')}. "
         f"{twin_summary} "
-        f"{next_steps}"
+        f"{next_steps} "
+        f"Recommended resources: {', '.join(resources)}"
     )
 
     prompt = _SYSTEM.format(context=context, message=inp.message)
@@ -113,5 +131,5 @@ def run_mentor(inp: MentorInput) -> MentorOutput:
     return MentorOutput(
         reply=reply.strip(),
         cited_skills=cited_skills[:5],
-        cited_resources=[],   # only populated when RAG is called; no hallucination
+        cited_resources=resources,   # Populated now.
     )

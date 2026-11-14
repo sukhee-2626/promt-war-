@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "updated_at": "2024-05-22T00:00:00Z"
+  },
+  "challenges": [
+    {"id": 1, "title": "SELECT Basics", "difficulty": "easy", "tags": ["select"]},
+    {"id": 2, "title": "WHERE Clause", "difficulty": "easy", "tags": ["filter"]},
+    {"id": 3, "title": "ORDER BY", "difficulty": "easy", "tags": ["sort"]},
+    {"id": 4, "title": "LIMIT Offset", "difficulty": "easy", "tags": ["pagination"]},
+    {"id": 5, "title": "Aggregate Functions", "difficulty": "medium", "tags": ["count", "sum", "avg"]},
+    {"id": 6, "title": "GROUP BY Basics", "difficulty": "medium", "tags": ["grouping"]},
+    {"id": 7, "title": "HAVING Clause", "difficulty": "medium", "tags": ["filtering-groups"]},
+    {"id": 8, "title": "INNER JOIN", "difficulty": "medium", "tags": ["joins"]},
+    {"id": 9, "title": "LEFT JOIN", "difficulty": "medium", "tags": ["joins"]},
+    {"id": 10, "title": "Self Join", "difficulty": "hard", "tags": ["joins"]},
+    {"id": 11, "title": "UNION vs UNION ALL", "difficulty": "medium", "tags": ["set-operations"]},
+    {"id": 12, "title": "Subqueries", "difficulty": "hard", "tags": ["subqueries"]},
+    {"id": 13, "title": "Correlated Subqueries", "difficulty": "hard", "tags": ["subqueries"]},
+    {"id": 14, "title": "Common Table Expressions", "difficulty": "hard", "tags": ["cte"]},
+    {"id": 15, "title": "Window Functions - ROW_NUMBER", "difficulty": "hard", "tags": ["window-functions"]},
+    {"id": 16, "title": "Window Functions - RANK/DENSE_RANK", "difficulty": "hard", "tags": ["window-functions"]},
+    {"id": 17, "title": "Window Functions - LEAD/LAG", "difficulty": "hard", "tags": ["window-functions"]},
+    {"id": 18, "title": "CASE Statements", "difficulty": "medium", "tags": ["logic"]},
+    {"id": 19, "title": "Data Modification - INSERT", "difficulty": "easy", "tags": ["dml"]},
+    {"id": 20, "title": "Data Modification - UPDATE", "difficulty": "easy", "tags": ["dml"]},
+    {"id": 21, "title": "Data Modification - DELETE", "difficulty": "easy", "tags": ["dml"]}
+  ]
+}

@@ -20,6 +20,7 @@ class CriticIssue(BaseModel):
     type: str          # "prereq_violation" | "unrealistic_hours" | "ignores_failure" | "low_variety"
     description: str
     affected_skill: str = ""
+    suggested_fix: str = ""
 
 
 class CriticOutput(BaseModel):
@@ -46,6 +47,7 @@ def run_critic(inp: CriticInput) -> CriticOutput:
                         type="prereq_violation",
                         description=f"{prereq} is a prerequisite of {sid} but appears after it.",
                         affected_skill=sid,
+                        suggested_fix=f"Move {sid} after {prereq}.",
                     ))
         seen.add(sid)
 
@@ -60,6 +62,7 @@ def run_critic(inp: CriticInput) -> CriticOutput:
                     type="unrealistic_hours",
                     description=f"Plan requires ~{avg_weekly:.0f}h/week. Learner budget is {inp.weekly_hours}h/week.",
                     affected_skill="",
+                    suggested_fix="Increase plan duration by adding more weeks.",
                 ))
 
     # 3. Recent failure ignored (failed skill not at top of plan)
@@ -72,6 +75,7 @@ def run_critic(inp: CriticInput) -> CriticOutput:
                     type="ignores_failure",
                     description=f"{fail_sid} was recently failed but appears at position {idx+1} instead of top.",
                     affected_skill=fail_sid,
+                    suggested_fix=f"Prioritize {fail_sid} to start.",
                 ))
 
     # 4. Plan too long without milestones (>10 skills per milestone)
@@ -86,6 +90,7 @@ def run_critic(inp: CriticInput) -> CriticOutput:
                     type="low_variety",
                     description=f"{ms} has {count} skills — consider splitting into sub-milestones.",
                     affected_skill="",
+                    suggested_fix="Split into smaller milestones.",
                 ))
 
     blocking = [i for i in issues if i.type in ("prereq_violation", "unrealistic_hours")]

@@ -10,7 +10,8 @@ router = APIRouter(prefix="/events", tags=["events"])
 
 
 class EventRequest(BaseModel):
-    event_type: str    # assessment_failed | assessment_passed | goal_changed | profile_updated | stalled_7_days
+    event_type: str    # assessment_failed | assessment_passed | goal_changed | profile_updated | stalled_7_days | interview | outreach
+    # ponytail: Events documented, not strictly validated; add Literal[...] for strictness.
     payload: dict = {}
 
 

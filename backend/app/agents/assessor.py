@@ -73,12 +73,12 @@ def run_assessor(inp: AssessorInput) -> AssessorOutput:
     prompt = _PROMPT.format(n=inp.n_questions, skill=inp.skill_name, level=inp.level)
     raw = _call_llm(prompt)
 
-    # Strip markdown fences if present
+    # Robust JSON extraction
     raw = raw.strip()
-    if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
+    start = raw.find("{")
+    end = raw.rfind("}") + 1
+    if start != -1 and end != -1:
+        raw = raw[start:end]
 
     try:
         data = json.loads(raw)
